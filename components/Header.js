@@ -1,9 +1,13 @@
 import Image from 'next/image';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import {
+  MagnifyingGlassIcon,
+  PlusCircleIcon,
+  HomeIcon,
+} from '@heroicons/react/24/outline';
 
 export default function Header() {
   return (
-    <div className="flex items-center justify-between max-w-7xl ">
+    <div className="flex items-center justify-between max-w-6xl mx-4 xl:mx-auto ">
       {/* Left */}
       <div className="h-24 w-24 relative hidden lg:inline-grid">
         <Image
@@ -34,7 +38,19 @@ export default function Header() {
       </div>
 
       {/* Right */}
-      <h1>Right side</h1>
+      <div className="flex space-x-4 items-center">
+        <HomeIcon className="hidden md:inline-flex h-6 text-black hover:scale-125 transition-transform duration-200 ease-out" />
+
+        <PlusCircleIcon className="h-6 text-black hover:scale-125 transition-transform duration-200 ease-out" />
+
+        <Image
+          className="hover:scale-105 transition-transform duration-200"
+          src="/images/profile.svg"
+          alt="user-image"
+          width={40}
+          height={40}
+        />
+      </div>
     </div>
   );
 }
