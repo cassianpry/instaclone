@@ -9,7 +9,6 @@ export default function Header() {
   return (
     <div className="shadow-sm border-b sticky top-0 bg-white z-30">
       <div className="flex items-center justify-between max-w-6xl mx-4 xl:mx-auto ">
-
         {/* Left */}
 
         <div className="h-24 w-24 relative hidden lg:inline-grid">
@@ -26,6 +25,8 @@ export default function Header() {
             src="/images/instagram-transparent.png"
             alt="logo"
             fill
+            sizes="(max-width: 96px) 100vw,
+            33vw"
           />
         </div>
 
@@ -43,7 +44,7 @@ export default function Header() {
         </div>
 
         {/* Right */}
-        
+
         <div className="flex space-x-4 items-center">
           <HomeIcon className="hidden md:inline-flex h-6 text-black hover:scale-125 transition-transform duration-200 ease-out" />
 
