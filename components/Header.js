@@ -9,7 +9,9 @@ export default function Header() {
   return (
     <div className="shadow-sm border-b sticky top-0 bg-white z-30">
       <div className="flex items-center justify-between max-w-6xl mx-4 xl:mx-auto ">
+
         {/* Left */}
+
         <div className="h-24 w-24 relative hidden lg:inline-grid">
           <Image
             className="object-contain"
@@ -26,7 +28,9 @@ export default function Header() {
             fill
           />
         </div>
+
         {/* Middle */}
+
         <div className="relative mt-1">
           <div className="absolute top-2 left-2">
             <MagnifyingGlassIcon className="h-5 text-gray-500" />
@@ -39,6 +43,7 @@ export default function Header() {
         </div>
 
         {/* Right */}
+        
         <div className="flex space-x-4 items-center">
           <HomeIcon className="hidden md:inline-flex h-6 text-black hover:scale-125 transition-transform duration-200 ease-out" />
 
