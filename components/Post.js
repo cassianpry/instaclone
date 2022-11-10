@@ -25,13 +25,12 @@ export default function Post({ id, username, userImg, img, caption }) {
       </div>
 
       {/* Post Image */}
-
       <Image
         className="object-cover w-full rounded-md"
         src={img}
         alt=""
-        width={1024}
-        height={1024}
+        width={1000}
+        height={1000}
       />
 
       {/* Post Buttons */}
