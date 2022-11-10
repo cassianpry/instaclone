@@ -26,7 +26,7 @@ export default function Post({ id, username, userImg, img, caption }) {
 
       {/* Post Image */}
       <Image
-        className="object-cover w-full rounded-md"
+        className="object-cover w-full rounded-lg p-1"
         src={img}
         alt=""
         width={1000}
