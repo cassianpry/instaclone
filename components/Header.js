@@ -19,7 +19,8 @@ export default function Header() {
             className="object-contain"
             src="/images/instaclone-logo.png"
             alt="logo"
-            fill
+            width={20}
+            height={20}
           />
         </div>
         <div className="h-24 w-10 relative lg:hidden">

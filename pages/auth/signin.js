@@ -13,6 +13,7 @@ export default function signin({ providers }) {
           alt="content"
           width={500}
           height={300}
+          priority
         />
         <div className="">
           {Object.values(providers).map((provider) => (
