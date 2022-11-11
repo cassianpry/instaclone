@@ -7,33 +7,36 @@ import {
   PlusCircleIcon,
   HomeIcon,
 } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/router';
 
 export default function Header() {
   const { data: session } = useSession();
   const [open, setOpen] = useRecoilState(modalState);
+  const router = useRouter();
 
   return (
     <div className="shadow-sm border-b sticky top-0 bg-white z-30">
       <div className="flex items-center justify-between max-w-6xl mx-4 xl:mx-auto ">
         {/* Left */}
 
-        <div className="h-24 w-24 relative hidden lg:inline-grid">
+        <div className="h-25 w-25 hidden items-center lg:inline-grid p-7">
           <Image
-            className="object-contain"
+            className="object-contain cursor-pointer"
             src="/images/instaclone-logo.png"
             alt="logo"
-            width={20}
-            height={20}
+            width={150}
+            height={150}
+            onClick={() => router.push('/')}
           />
         </div>
         <div className="h-24 w-10 relative lg:hidden">
           <Image
-            className="object-contain"
+            className="object-contain cursor-pointer"
             src="/images/instagram-transparent.png"
             alt="logo"
             fill
-            sizes="(max-width: 96px) 100vw,
-            33vw"
+            sizes="(max-width: 96px) 100vw,33vw"
+            onClick={() => router.push('/')}
           />
         </div>
 
@@ -53,7 +56,10 @@ export default function Header() {
         {/* Right */}
 
         <div className="flex space-x-4 items-center">
-          <HomeIcon className="hidden md:inline-flex h-6 text-black hover:scale-125 transition-transform duration-200 ease-out" />
+          <HomeIcon
+            className="cursor-pointer hidden md:inline-flex h-6 text-black hover:scale-125 transition-transform duration-200 ease-out"
+            onClick={() => router.push('/')}
+          />
           {session ? (
             <>
               <PlusCircleIcon
