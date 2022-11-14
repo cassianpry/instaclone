@@ -9,21 +9,28 @@ import {
   FaceSmileIcon,
   HeartIcon,
 } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartIconFilled } from '@heroicons/react/24/solid';
 import { useEffect, useState } from 'react';
 import {
   addDoc,
   collection,
+  deleteDoc,
+  doc,
   onSnapshot,
   orderBy,
   query,
   serverTimestamp,
+  setDoc,
 } from 'firebase/firestore';
 import { db } from '../firebase';
+import 'moment/locale/pt-br';
 
 export default function Post({ id, username, userImg, img, caption }) {
   const { data: session } = useSession();
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
+  const [likes, setLikes] = useState([]);
+  const [liked, setLiked] = useState(false);
 
   const sendComment = async (e) => {
     e.preventDefault();
@@ -36,6 +43,21 @@ export default function Post({ id, username, userImg, img, caption }) {
       timestamp: serverTimestamp(),
     });
   };
+
+  const likePost = async () => {
+    if (liked) {
+      await deleteDoc(doc(db, 'posts', id, 'likes', id));
+    } else {
+      await setDoc(doc(db, 'posts', id, 'likes', id), {
+        username: session.user.name,
+      });
+    }
+  };
+
+  useEffect(() => {
+    setLiked(likes.findIndex((like) => like.id === session?.user.id) !== -1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [likes]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -78,7 +100,15 @@ export default function Post({ id, username, userImg, img, caption }) {
       {session && (
         <div className="flex justify-between px-4 pt-4">
           <div className=" flex space-x-4">
-            <HeartIcon className="btn" />
+            {liked ? (
+              <HeartIconFilled
+                onClick={likePost}
+                className="btn text-red-600"
+              />
+            ) : (
+              <HeartIcon onClick={likePost} className="btn text-red-600" />
+            )}
+
             <ChatBubbleOvalLeftEllipsisIcon className="btn" />
           </div>
           <BookmarkIcon className="btn" />
@@ -92,7 +122,7 @@ export default function Post({ id, username, userImg, img, caption }) {
         {caption}
       </p>
       {comments.length > 0 && (
-        <div className="mx-10 max-h-24 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-300 overflow-y-scroll scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
+        <div className="mx-10 max-h-24 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
           {comments.map((comment) => (
             <div className="flex items-center space-x-2 mb-2" key={comment.id}>
               <Image
@@ -104,7 +134,9 @@ export default function Post({ id, username, userImg, img, caption }) {
               />
               <p className="font-semibold">{comment.data().username}</p>
               <p className="flex-1 truncate">{comment.data().comment}</p>
-              <Moment fromNow>{comment.data().timestamp?.toDate()}</Moment>
+              <Moment locale="pt-br" fromNow>
+                {comment.data().timestamp?.toDate()}
+              </Moment>
             </div>
           ))}
         </div>
