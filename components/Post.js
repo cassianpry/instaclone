@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
+import Moment from 'react-moment';
+import 'moment-timezone';
 import {
   BookmarkIcon,
   ChatBubbleOvalLeftEllipsisIcon,
@@ -7,13 +9,21 @@ import {
   FaceSmileIcon,
   HeartIcon,
 } from '@heroicons/react/24/outline';
-import { useState } from 'react';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+} from 'firebase/firestore';
 import { db } from '../firebase';
 
-export default function Post({id, username, userImg, img, caption }) {
+export default function Post({ id, username, userImg, img, caption }) {
   const { data: session } = useSession();
   const [comment, setComment] = useState('');
+  const [comments, setComments] = useState([]);
 
   const sendComment = async (e) => {
     e.preventDefault();
@@ -26,6 +36,19 @@ export default function Post({id, username, userImg, img, caption }) {
       timestamp: serverTimestamp(),
     });
   };
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(
+        collection(db, 'posts', id, 'comments'),
+        orderBy('timestamp', 'desc')
+      ),
+      (snapshot) => {
+        setComments(snapshot.docs);
+      }
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [db, id]);
 
   return (
     <div className="bg-white my-7 border rounded-md">
@@ -68,6 +91,24 @@ export default function Post({id, username, userImg, img, caption }) {
         <span className="font-bold mr-2">{username}</span>
         {caption}
       </p>
+      {comments.length > 0 && (
+        <div className="mx-10 max-h-24 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-300 overflow-y-scroll scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
+          {comments.map((comment) => (
+            <div className="flex items-center space-x-2 mb-2" key={comment.id}>
+              <Image
+                className="rounded-full object-cover"
+                src={comment.data().userImage}
+                alt="user"
+                width={30}
+                height={30}
+              />
+              <p className="font-semibold">{comment.data().username}</p>
+              <p className="flex-1 truncate">{comment.data().comment}</p>
+              <Moment fromNow>{comment.data().timestamp?.toDate()}</Moment>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Post Inputbox */}
       {session && (
