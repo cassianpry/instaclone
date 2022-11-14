@@ -15,6 +15,7 @@ export default function Posts() {
       }
     );
     return unsubscribe;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db]);
   return (
     <div>
